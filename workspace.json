@@ -1,0 +1,84 @@
+{
+  "version": 2,
+  "projects": {
+    "testplugin": {
+      "root": "packages/testplugin",
+      "sourceRoot": "packages/testplugin/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/testplugin/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/packages/testplugin"
+          ],
+          "options": {
+            "jestConfig": "packages/testplugin/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/packages/testplugin",
+            "tsConfig": "packages/testplugin/tsconfig.lib.json",
+            "packageJson": "packages/testplugin/package.json",
+            "main": "packages/testplugin/src/index.ts",
+            "assets": [
+              "packages/testplugin/*.md",
+              {
+                "input": "./packages/testplugin/src",
+                "glob": "**/!(*.ts)",
+                "output": "./src"
+              },
+              {
+                "input": "./packages/testplugin/src",
+                "glob": "**/*.d.ts",
+                "output": "./src"
+              },
+              {
+                "input": "./packages/testplugin",
+                "glob": "generators.json",
+                "output": "."
+              },
+              {
+                "input": "./packages/testplugin",
+                "glob": "executors.json",
+                "output": "."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "testplugin-e2e": {
+      "projectType": "application",
+      "root": "e2e/testplugin-e2e",
+      "sourceRoot": "e2e/testplugin-e2e/src",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/nx-plugin:e2e",
+          "options": {
+            "target": "testplugin:build",
+            "npmPackageName": "@nx-plugin/testplugin",
+            "pluginOutputPath": "dist/packages/testplugin",
+            "jestConfig": "e2e/testplugin-e2e/jest.config.js"
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/workspace"
+  }
+}
